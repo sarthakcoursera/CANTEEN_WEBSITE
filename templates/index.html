@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Menu - Smart Canteen{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Smart Canteen</h1>
+    <p>Order fresh, delicious food from our canteen</p>
+</div>
+
+<div class="category-filter">
+    <button class="filter-btn active" onclick="filterCategory('all')">All</button>
+    {% for category in categories %}
+        <button class="filter-btn" onclick="filterCategory('{{ category }}')">{{ category }}</button>
+    {% endfor %}
+</div>
+
+<div class="menu-grid" id="menuGrid">
+    {% for item in menu_items %}
+    <div class="menu-card" data-category="{{ item.category }}">
+        <div class="menu-card-icon">
+            {% if item.category == 'Meals' %}🍱
+            {% elif item.category == 'Breakfast' %}🥞
+            {% elif item.category == 'Snacks' %}🥪
+            {% elif item.category == 'Beverages' %}☕
+            {% else %}🍽️
+            {% endif %}
+        </div>
+        <div class="menu-card-body">
+            <span class="category-tag">{{ item.category }}</span>
+            <h3>{{ item.name }}</h3>
+            <p class="description">{{ item.description }}</p>
+            <div class="card-footer">
+                <span class="price">₹{{ item.price | int }}</span>
+                <form action="{{ url_for('add_to_cart', item_id=item.id) }}" method="post">
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function filterCategory(category) {
+    const cards = document.querySelectorAll('.menu-card');
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

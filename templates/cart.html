@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart - Smart Canteen{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Your Cart</h1>
+</div>
+
+{% if items %}
+<div class="cart-container">
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in items %}
+            <tr>
+                <td>{{ entry.item.name }}</td>
+                <td>₹{{ entry.item.price | int }}</td>
+                <td>{{ entry.quantity }}</td>
+                <td>₹{{ entry.subtotal | int }}</td>
+                <td>
+                    <form action="{{ url_for('remove_from_cart', item_id=entry.item.id) }}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"><strong>Total</strong></td>
+                <td colspan="2"><strong>₹{{ total | int }}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="cart-actions">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Continue Shopping</a>
+        <a href="{{ url_for('checkout') }}" class="btn btn-primary">Proceed to Checkout</a>
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">🛒</div>
+    <h2>Your cart is empty</h2>
+    <p>Browse our menu and add some delicious items!</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">View Menu</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed - Smart Canteen{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <div class="confirmation-icon">✅</div>
+    <h1>Order Placed Successfully!</h1>
+    <p class="order-id">Order #{{ order.id }}</p>
+    <p>Thank you, <strong>{{ order.customer_name }}</strong>! Your order has been received.</p>
+
+    <div class="order-details">
+        <h3>Order Details</h3>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for oi in order.items %}
+                <tr>
+                    <td>{{ oi.menu_item.name }}</td>
+                    <td>{{ oi.quantity }}</td>
+                    <td>₹{{ (oi.menu_item.price * oi.quantity) | int }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"><strong>Total</strong></td>
+                    <td><strong>₹{{ order.total | int }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+        <p class="order-status">Status: <span class="status-badge status-{{ order.status }}">{{ order.status | capitalize }}</span></p>
+    </div>
+
+    <div class="confirmation-actions">
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Order More</a>
+        <a href="{{ url_for('orders') }}" class="btn btn-secondary">View All Orders</a>
+    </div>
+</div>
+{% endblock %}

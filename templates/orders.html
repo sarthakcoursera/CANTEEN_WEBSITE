@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}All Orders - Smart Canteen{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>All Orders</h1>
+</div>
+
+{% if orders %}
+<div class="orders-container">
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-card-header">
+            <span class="order-number">Order #{{ order.id }}</span>
+            <span class="status-badge status-{{ order.status }}">{{ order.status | capitalize }}</span>
+        </div>
+        <div class="order-card-body">
+            <p><strong>Customer:</strong> {{ order.customer_name }}</p>
+            <p><strong>Date:</strong> {{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</p>
+            <p><strong>Items:</strong>
+                {% for oi in order.items %}
+                    {{ oi.menu_item.name }} x{{ oi.quantity }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <p><strong>Total:</strong> ₹{{ order.total | int }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">📋</div>
+    <h2>No orders yet</h2>
+    <p>Start ordering delicious food from our menu!</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">View Menu</a>
+</div>
+{% endif %}
+{% endblock %}

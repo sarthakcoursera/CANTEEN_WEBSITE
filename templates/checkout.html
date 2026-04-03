@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - Smart Canteen{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Checkout</h1>
+</div>
+
+<div class="checkout-container">
+    <div class="order-summary">
+        <h2>Order Summary</h2>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in items %}
+                <tr>
+                    <td>{{ entry.item.name }}</td>
+                    <td>{{ entry.quantity }}</td>
+                    <td>₹{{ entry.subtotal | int }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"><strong>Total</strong></td>
+                    <td><strong>₹{{ total | int }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="checkout-form">
+        <h2>Your Details</h2>
+        <form action="{{ url_for('checkout') }}" method="post">
+            <div class="form-group">
+                <label for="customer_name">Your Name</label>
+                <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Enter your name" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
