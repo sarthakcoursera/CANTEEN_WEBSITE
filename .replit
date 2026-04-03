@@ -1,4 +1,7 @@
+language = "python3"
+run = "python app.py"
 modules = ["python-3.11"]
+
 [agent]
 expertMode = true
 
@@ -15,29 +18,20 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Start application"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "CANTEEN_WEBSITE"
 
 [[workflows.workflow]]
 name = "CANTEEN_WEBSITE"
-mode = "sequential"
 author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python app.py"
 waitForPort = 5000
 
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[deployment]
-deploymentTarget = "autoscale"
-run = ["gunicorn", "--bind=0.0.0.0:5000", "--reuse-port", "app:app"]
