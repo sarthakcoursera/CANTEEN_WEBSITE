@@ -24,13 +24,13 @@ args = "CANTEEN_WEBSITE"
 name = "CANTEEN_WEBSITE"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python app.py"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "fuser -k 5000/tcp 2>/dev/null; sleep 1; python app.py"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
